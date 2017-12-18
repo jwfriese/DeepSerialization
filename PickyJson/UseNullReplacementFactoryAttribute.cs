@@ -14,8 +14,13 @@ namespace PickyJson
 
         public INullReplacementFactory GetFactory()
         {
-            // throw exception if _type is not an implementor
-            return (INullReplacementFactory)Activator.CreateInstance(_type);
+            var doesTypeImplementInterface = typeof(INullReplacementFactory).IsAssignableFrom(_type);
+            if (doesTypeImplementInterface)
+            {
+                return (INullReplacementFactory) Activator.CreateInstance(_type);
+            }
+
+            throw new MissingInterfaceImplException(_type, typeof(INullReplacementFactory));
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PickyJson
 {
@@ -43,17 +44,56 @@ namespace PickyJson
             writer.WriteEndObject();
         }
 
-        public override object ReadJson(JsonReader reader,
-            Type objectType,
-            object existingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType,
+            object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            if (reader.TokenType == JsonToken.Null)
+            {
+                return null;
+            }
+            JObject jObject = JObject.Load(reader);
+            var target = Activator.CreateInstance(objectType);
+            using (var jObjectReader = CopyReaderForObject(reader, jObject))
+            {
+                serializer.Populate(jObjectReader, target);
+            }
+            
+            var properties = target.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                var propertyValue = property.GetValue(target, null);
+                if (propertyValue == null)
+                {
+                    var defaultFactoryAttribute = property.GetCustomAttributes()
+                        .OfType<UseNullReplacementFactoryAttribute>()
+                        .FirstOrDefault();
+                    if (defaultFactoryAttribute != null)
+                    {
+                        var factory = defaultFactoryAttribute.GetFactory();
+                        property.SetValue(target, factory.CreateReplacement());
+                    }
+                }
+            }
+
+            return target;
         }
 
         public override bool CanConvert(Type objectType)
         {
             return true;
+        }
+
+        private JsonReader CopyReaderForObject(JsonReader reader, JObject jObject)
+        {
+            JsonReader jObjectReader = jObject.CreateReader();
+            jObjectReader.Culture = reader.Culture;
+            jObjectReader.DateFormatString = reader.DateFormatString;
+            jObjectReader.DateParseHandling = reader.DateParseHandling;
+            jObjectReader.DateTimeZoneHandling = reader.DateTimeZoneHandling;
+            jObjectReader.FloatParseHandling = reader.FloatParseHandling;
+            jObjectReader.MaxDepth = reader.MaxDepth;
+            jObjectReader.SupportMultipleContent = reader.SupportMultipleContent;
+            return jObjectReader;
         }
     }
 }

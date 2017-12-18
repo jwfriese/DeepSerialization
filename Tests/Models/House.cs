@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using PickyJson;
 
 namespace Tests.Models
@@ -7,12 +8,22 @@ namespace Tests.Models
     {
         public object CreateReplacement()
         {
-            return new Room();
+            return new Room()
+            {
+                CarpetColor = "",
+                Bed = new Bed
+                {
+                    CoverColor = "",
+                    HasHeadboard = false,
+                    NumberOfLegs = 0,
+                }
+            };
+
         }
     }
     
     [JsonConverter(typeof(PickySerializer))]
-    public class House
+    public class House : IEquatable<House>
     {
         [UseNullReplacementFactory(typeof(NullStringReplacementFactory))]
         public string RoofColor { get; set; }
@@ -20,5 +31,31 @@ namespace Tests.Models
         
         [UseNullReplacementFactory(typeof(NullReplacementRoomFactory))]
         public Room Room { get; set; }
+
+        public bool Equals(House other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return string.Equals(RoofColor, other.RoofColor) && NumberOfWindows == other.NumberOfWindows && Equals(Room, other.Room);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((House) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (RoofColor != null ? RoofColor.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ NumberOfWindows;
+                hashCode = (hashCode * 397) ^ (Room != null ? Room.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
     }
 }

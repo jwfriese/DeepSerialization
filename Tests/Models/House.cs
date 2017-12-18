@@ -8,15 +8,11 @@ namespace Tests.Models
     {
         public object CreateReplacement()
         {
+            var bedReplacementFactory = new NullReplacementBedFactory();
             return new Room()
             {
                 CarpetColor = "",
-                Bed = new Bed
-                {
-                    CoverColor = "",
-                    HasHeadboard = false,
-                    NumberOfLegs = 0,
-                }
+                Bed = (Bed)bedReplacementFactory.CreateReplacement(),
             };
 
         }

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace DeepSerialization
+namespace PickyJson
 {
-    public class DeepSerializer : JsonConverter
+    public class PickySerializer : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {

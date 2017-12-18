@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeepSerialization", "DeepSerialization\DeepSerialization.csproj", "{9DE0B9F8-7CD6-4718-BB57-930C631D9D0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickyJson", "PickyJson\PickyJson.csproj", "{9DE0B9F8-7CD6-4718-BB57-930C631D9D0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4BD26DFD-479D-4DB1-B044-5A40C040543D}"
 EndProject

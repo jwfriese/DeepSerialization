@@ -1,5 +1,5 @@
-﻿using DeepSerialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PickyJson;
 
 namespace Tests.Models
 {
@@ -11,7 +11,7 @@ namespace Tests.Models
         }
     }
 
-    [JsonConverter(typeof(DeepSerializer))]
+    [JsonConverter(typeof(PickySerializer))]
     public class Room
     {
         [UseNullReplacementFactory(typeof(NullStringReplacementFactory))]

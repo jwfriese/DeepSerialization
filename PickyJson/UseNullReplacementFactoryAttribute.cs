@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeepSerialization
+namespace PickyJson
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class UseNullReplacementFactoryAttribute : Attribute

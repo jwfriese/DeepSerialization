@@ -1,4 +1,4 @@
-﻿namespace DeepSerialization
+﻿namespace PickyJson
 {
     public interface INullReplacementFactory
     {

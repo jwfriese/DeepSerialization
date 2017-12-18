@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DeepSerialization
+namespace PickyJson
 {
     public class NullStringReplacementFactory : INullReplacementFactory
     {

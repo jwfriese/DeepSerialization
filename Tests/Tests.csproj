@@ -9,6 +9,9 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DeepSerialization\DeepSerialization.csproj" />
+    <ProjectReference Include="..\PickyJson\PickyJson.csproj">
+      <Project>{9DE0B9F8-7CD6-4718-BB57-930C631D9D0C}</Project>
+      <Name>PickyJson</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using DeepSerialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PickyJson;
 
 namespace Tests.Models
 {
@@ -12,7 +11,7 @@ namespace Tests.Models
         }
     }
     
-    [JsonConverter(typeof(DeepSerializer))]
+    [JsonConverter(typeof(PickySerializer))]
     public class House
     {
         [UseNullReplacementFactory(typeof(NullStringReplacementFactory))]

@@ -24,22 +24,19 @@ namespace PickyJson
                 var shouldSkip = property.GetCustomAttributes()
                     .OfType<JsonIgnoreAttribute>()
                     .Any();
-                if (shouldSkip)
-                {
-                    continue;
-                }
+                if (shouldSkip) continue;
                 var propertyValue = property.GetValue(value, null);
                 if (propertyValue == null)
                 {
                     var defaultFactoryAttribute = property.GetCustomAttributes()
                         .OfType<UseNullReplacementFactoryAttribute>()
                         .FirstOrDefault();
-                    if (defaultFactoryAttribute != null)
-                    {
-                        writer.WritePropertyName(property.Name);
-                        var factory = defaultFactoryAttribute.GetFactory();
-                        serializer.Serialize(writer, factory.CreateReplacement());
-                    }
+                    
+                    if (defaultFactoryAttribute == null) continue;
+                    
+                    writer.WritePropertyName(property.Name);
+                    var factory = defaultFactoryAttribute.GetFactory();
+                    serializer.Serialize(writer, factory.CreateReplacement());
                 }
                 else
                 {
@@ -69,17 +66,17 @@ namespace PickyJson
             foreach (var property in properties)
             {
                 var propertyValue = property.GetValue(target, null);
-                if (propertyValue == null)
-                {
-                    var defaultFactoryAttribute = property.GetCustomAttributes()
-                        .OfType<UseNullReplacementFactoryAttribute>()
-                        .FirstOrDefault();
-                    if (defaultFactoryAttribute != null)
-                    {
-                        var factory = defaultFactoryAttribute.GetFactory();
-                        property.SetValue(target, factory.CreateReplacement());
-                    }
-                }
+                
+                if (propertyValue != null) continue;
+                
+                var defaultFactoryAttribute = property.GetCustomAttributes()
+                    .OfType<UseNullReplacementFactoryAttribute>()
+                    .FirstOrDefault();
+                
+                if (defaultFactoryAttribute == null) continue;
+                
+                var factory = defaultFactoryAttribute.GetFactory();
+                property.SetValue(target, factory.CreateReplacement());
             }
 
             return target;

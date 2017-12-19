@@ -21,6 +21,13 @@ namespace PickyJson
 
             foreach (var property in properties)
             {
+                var shouldSkip = property.GetCustomAttributes()
+                    .OfType<JsonIgnoreAttribute>()
+                    .Any();
+                if (shouldSkip)
+                {
+                    continue;
+                }
                 var propertyValue = property.GetValue(value, null);
                 if (propertyValue == null)
                 {
@@ -51,13 +58,13 @@ namespace PickyJson
             {
                 return null;
             }
-            JObject jObject = JObject.Load(reader);
+            var jObject = JObject.Load(reader);
             var target = Activator.CreateInstance(objectType);
             using (var jObjectReader = CopyReaderForObject(reader, jObject))
             {
                 serializer.Populate(jObjectReader, target);
             }
-            
+
             var properties = target.GetType().GetProperties();
             foreach (var property in properties)
             {
